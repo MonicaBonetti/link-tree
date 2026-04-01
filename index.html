@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monica Bonetti</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&amp;family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --creme:#ffeecf; --terra:#cd764b; --or:#c88d25;
+  --teal:#49ada4; --brun:#4a2e1a; --brun-mid:#9b6c48;
+  --blanc:#ffffff; --fond:#faf6f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--fond);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 20px 60px;}
+
+/* BARRE EDITION */
+#barre-edit{width:100%;max-width:480px;background:var(--brun);color:var(--creme);font-family:'Nunito',sans-serif;font-size:12px;padding:8px 16px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:28px;}
+#barre-edit span{opacity:0.75;}
+#barre-edit button{background:var(--terra);color:var(--blanc);border:none;border-radius:20px;padding:5px 14px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+#msg-save{color:var(--or);font-weight:700;display:none;margin-right:6px;}
+
+/* BOUTON LIEN */
+.btn-lien{display:inline-block;background:var(--or);color:var(--blanc);border:none;border-radius:8px;padding:3px 10px;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;cursor:pointer;position:absolute;top:8px;right:44px;opacity:0;transition:opacity 0.15s;z-index:10;}
+.mb-card:hover .btn-lien{opacity:1;}
+
+/* EDITABLE */
+[contenteditable]{outline:none;border-radius:4px;cursor:text;-webkit-user-modify:read-write-plaintext-only;}
+[contenteditable]:hover{background:rgba(200,141,37,0.1);}
+[contenteditable]:focus{background:rgba(200,141,37,0.15);box-shadow:0 0 0 2px #c88d2540;}
+[contenteditable] *{color:inherit !important;font-family:inherit !important;font-size:inherit !important;font-style:inherit !important;font-weight:inherit !important;background:transparent !important;}
+
+/* ROOT */
+.mb-root{display:flex;flex-direction:column;align-items:center;width:100%;max-width:480px;}
+
+/* LOGO */
+.mb-logo{width:88px;height:88px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:var(--creme);margin-bottom:20px;border:3px solid var(--creme);box-shadow:0 0 0 5px #cd764b25;}
+
+/* NOM / TAGLINE / MANTRA */
+.mb-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:var(--brun);text-align:center;margin:0 0 8px;}
+.mb-tagline{font-size:14px;color:var(--brun-mid);text-align:center;margin:0 0 10px;line-height:1.6;}
+.mb-mantra{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:var(--brun-mid);text-align:center;margin-bottom:32px;line-height:1.6;}
+
+/* LABEL SECTION */
+.mb-section-label{font-size:10px;font-weight:700;color:var(--or);letter-spacing:0.14em;text-transform:uppercase;margin:0 0 10px;align-self:flex-start;width:100%;}
+
+/* CARTE STANDARD */
+.mb-card{background:var(--blanc);border-radius:18px;padding:16px 20px;width:100%;margin-bottom:10px;border:1px solid #f0e4d4;display:flex;align-items:center;gap:14px;text-decoration:none;position:relative;transition:transform 0.15s,box-shadow 0.15s;}
+.mb-card:hover{transform:translateY(-1px);box-shadow:0 4px 20px #cd764b15;}
+
+/* CARTE TERRACOTTA */
+.mb-highlight{background:var(--terra);border-color:var(--terra);box-shadow:0 6px 24px #cd764b30;}
+.mb-highlight .mb-card-title{color:var(--creme);}
+.mb-highlight .mb-card-sub{color:#f7d5be;}
+.mb-highlight .mb-card-arrow{color:var(--creme);}
+.mb-highlight .icon-interne{background:#b5603a;}
+
+/* ICONES */
+.mb-card-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;}
+.icon-creme{background:var(--creme);}
+.icon-teal{background:#e8f5f4;}
+.icon-or{background:#fdf3e3;}
+.icon-interne{background:var(--creme);}
+
+/* TEXTE */
+.mb-card-text{flex:1;}
+.mb-card-title{font-size:15px;font-weight:700;color:var(--brun);margin:0 0 3px;line-height:1.3;}
+.mb-card-sub{font-size:12px;color:var(--brun-mid);margin:0;line-height:1.4;}
+.mb-card-arrow{font-size:15px;color:var(--terra);font-weight:700;flex-shrink:0;}
+
+/* BADGE PLACES */
+.badge-places{display:inline-block;background:var(--creme);color:var(--terra);font-size:10px;font-weight:700;border-radius:20px;padding:2px 8px;margin-left:6px;vertical-align:middle;font-family:'Nunito',sans-serif;}
+
+/* SÉPARATEUR */
+.mb-divider{width:40px;height:2px;background:linear-gradient(90deg,var(--terra),var(--or));border-radius:2px;margin:20px 0 16px;align-self:flex-start;}
+
+/* SITE EN BAS */
+.mb-site{margin-top:32px;text-align:center;}
+.mb-site a{color:var(--brun-mid);font-size:13px;font-weight:600;text-decoration:none;border-bottom:1px solid #f0e4d4;padding-bottom:2px;}
+.mb-site a:hover{color:var(--terra);}
+</style>
+</head>
+<body>
+
+
+
+<div class="mb-root">
+
+  <!-- LOGO -->
+  <div class="mb-logo">MB</div>
+
+  <!-- IDENTITÉ -->
+  <h1 class="mb-name">Monica Bonetti</h1>
+  <p class="mb-tagline">Coach pour les mamans qui veulent poser leur cerveau et profiter de leur kid.</p>
+  <p class="mb-mantra">Faire moins ne fait pas de toi une mauvaise mère.</p>
+
+  <!-- SECTION 1 -->
+  <p class="mb-section-label">À ne pas manquer</p>
+
+  <a class="mb-card mb-highlight" id="card-1" href="https://monicabonetti.github.io/resetchargementale/" target="_blank">
+    
+    <div class="mb-card-icon icon-interne">✨</div>
+    <div class="mb-card-text">
+      <p class="mb-card-title">Reset charge mentale — CHF 57 <span class="badge-places">Places limitées</span></p>
+      <p class="mb-card-sub">2h en individuel pour alléger ta tête dès demain</p>
+    </div>
+    <span class="mb-card-arrow">→</span>
+  </a>
+
+  <div class="mb-divider"></div>
+
+  <!-- SECTION 2 -->
+  <p class="mb-section-label">Ressources gratuites</p>
+
+  <a class="mb-card" id="card-2" href="https://forms.gle/JyvfDNHLgxmHTpuh8" target="_blank">
+    
+    <div class="mb-card-icon icon-creme">🎁</div>
+    <div class="mb-card-text">
+      <p class="mb-card-title">À combien tu tournes ?</p>
+      <p class="mb-card-sub">À bout ou tu tiens encore ? Fais le quiz et découvre ton niveau de charge mentale.</p>
+    </div>
+    <span class="mb-card-arrow">→</span>
+  </a>
+
+  <a class="mb-card" id="card-3" href="https://drive.google.com/file/d/1ooyGzovjEYYPcFZJDBLjTeq57aLlirVb/view?usp=sharing" target="_blank">
+    
+    <div class="mb-card-icon icon-teal">🎧</div>
+    <div class="mb-card-text">
+      <p class="mb-card-title">Méditation anti-surchauffe</p>
+      <p class="mb-card-sub">Quand le cerveau tourne à plein régime</p>
+    </div>
+    <span class="mb-card-arrow">→</span>
+  </a>
+
+  <div class="mb-divider"></div>
+
+  <!-- SECTION 3 -->
+  <p class="mb-section-label">Me retrouver</p>
+
+  <a class="mb-card" id="card-4" href="https://www.instagram.com/monica_bonetti__/" target="_blank">
+    
+    <div class="mb-card-icon icon-creme">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#cd764b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="#cd764b" stroke="none"></circle></svg>
+    </div>
+    <div class="mb-card-text">
+      <p class="mb-card-title">Instagram</p>
+      <p class="mb-card-sub">@monica_bonetti__ · conseils quotidiens</p>
+    </div>
+    <span class="mb-card-arrow">→</span>
+  </a>
+
+  <a class="mb-card" id="card-5" href="https://monica-bonetti.systeme.io/newsletter" target="_blank">
+    
+    <div class="mb-card-icon icon-or">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c88d25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="2,4 12,13 22,4"></polyline></svg>
+    </div>
+    <div class="mb-card-text">
+      <p class="mb-card-title">Newsletter</p>
+      <p class="mb-card-sub">Chaque semaine, une pincée de légèreté dans ta boîte mail.</p>
+    </div>
+    <span class="mb-card-arrow">→</span>
+  </a>
+
+  <!-- SITE -->
+  <div class="mb-site">
+    <a href="https://monica-bonetti.ch" target="_blank">🌐 monica-bonetti.ch</a>
+  </div>
+
+</div>
+
+<script>
+function modifierLien(e, id) {
+  e.preventDefault();
+  e.stopPropagation();
+  var el = document.getElementById(id);
+  var actuel = el.getAttribute('href');
+  var nouveau = prompt('Colle ton lien ici :', actuel === '#' ? '' : actuel);
+  if (nouveau !== null) {
+    el.setAttribute('href', nouveau.trim() || '#');
+  }
+}
+
+document.querySelectorAll('[contenteditable]').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  });
+});
+
+function sauvegarder() {
+  var clone = document.documentElement.cloneNode(true);
+  clone.querySelector('#barre-edit').remove();
+  clone.querySelectorAll('.btn-lien').forEach(function(b){ b.remove(); });
+  clone.querySelectorAll('[contenteditable]').forEach(function(el){ el.removeAttribute('contenteditable'); });
+  var html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  var blob = new Blob([html], {type:'text/html'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'monica-bonetti-linktree-FINAL.html';
+  a.click();
+  var msg = document.getElementById('msg-save');
+  msg.style.display = 'inline';
+  setTimeout(function(){ msg.style.display = 'none'; }, 2500);
+}
+</script>
+
+
+</body></html>
